@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Cliente {
+  id              Int          @id @default(autoincrement())
+  nome            String
+  nomeSocial      String?
+  dataNascimento  DateTime?
+  dataCadastro    DateTime     @default(now())
+  hospedagens     Hospedagem[]
+
+  @@map("clientes")
+}
+
+model Acomodacao {
+  id          Int          @id @default(autoincrement())
+  numero      String       @unique
+  tipo        String
+  capacidade  Int
+  precoDiaria Float
+  andar       Int
+  descricao   String?
+  status      String       @default("Disponível")
+  hospedagens Hospedagem[]
+
+  @@map("acomodacoes")
+}
+
+model Hospedagem {
+  id          Int        @id @default(autoincrement())
+  clienteId   Int
+  acomodacaoId Int
+  checkIn     DateTime
+  checkOut    DateTime
+  status      String     @default("Ativa")
+  valorTotal  Float      @default(0)
+  observacoes String?
+  cliente     Cliente    @relation(fields: [clienteId], references: [id])
+  acomodacao  Acomodacao @relation(fields: [acomodacaoId], references: [id])
+
+  @@map("hospedagens")
+}
