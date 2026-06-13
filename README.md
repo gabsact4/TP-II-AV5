@@ -1,4 +1,4 @@
-## Criando o arquivo .env
+
 
 Dentro da pasta `backend`, crie um arquivo chamado:
 
